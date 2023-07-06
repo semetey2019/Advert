@@ -51,6 +51,17 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 AppSizes.height10,
                 CustomTextField(
+                  prefixIcon: Center(
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.photo_camera),
+                    ),
+                  ),
+                  controller: _description,
+                  maxLines: 8,
+                ),
+                AppSizes.height10,
+                CustomTextField(
                   hintext: 'name',
                   controller: _name,
                 ),

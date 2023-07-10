@@ -9,7 +9,13 @@ class DateTimeService {
         builder: (BuildContext builder) {
           return Container(
             height: MediaQuery.of(context).copyWith().size.height * 0.25,
-            color: Colors.blue,
+            decoration: const BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                topRight: Radius.circular(10.0),
+              ),
+            ),
             child: CupertinoDatePicker(
               mode: CupertinoDatePickerMode.date,
               onDateTimeChanged: onDateTimeChanged,

@@ -4,6 +4,7 @@ import 'package:advert/components/custom_text_field.dart';
 import 'package:advert/constants/app_size.dart';
 import 'package:advert/services/date_time_services.dart';
 import 'package:advert/services/image_picker_services.dart';
+import 'package:advert/services/storage_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -25,7 +26,8 @@ class _AddProductState extends State<AddProduct> {
   final _dateTime = TextEditingController();
   final _phoneNumber = TextEditingController();
   final _adress = TextEditingController();
-
+  List<XFile> images = [];
+  final service = ImagePickerService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +52,46 @@ class _AddProductState extends State<AddProduct> {
               maxLines: 8,
             ),
             AppSizes.height10,
-            ImageContainer(),
+            Container(
+              padding: const EdgeInsets.all(10),
+              height: 300,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.blue, Colors.purple, Colors.pink],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight),
+              ),
+              child: images.isNotEmpty
+                  ? GridView(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 10,
+                      ),
+                      children: images
+                          .map(
+                            (e) => ItemCard(
+                              file: File(e.path),
+                            ),
+                          )
+                          .toList(),
+                    )
+                  : IconButton(
+                      onPressed: () async {
+                        final value = await service.pickImages();
+                        if (value != null) {
+                          images = value;
+                          setState(() {});
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.photo_camera,
+                        size: 50,
+                        color: Colors.black,
+                      ),
+                    ),
+            ),
             AppSizes.height10,
             CustomTextField(
               hintext: 'name',
@@ -77,6 +118,14 @@ class _AddProductState extends State<AddProduct> {
               hintext: 'adress',
               controller: _adress,
             ),
+            AppSizes.height10,
+            ElevatedButton.icon(
+              onPressed: () async {
+                await StorageService().uploadImages(images);
+              },
+              icon: const Icon(Icons.publish),
+              label: const Text('Send'),
+            )
           ],
         ),
       ),

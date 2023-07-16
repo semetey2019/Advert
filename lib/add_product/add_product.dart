@@ -156,8 +156,8 @@ class ItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 150,
-      width: 140,
+      height: 300,
+      width: 300,
       child: Image.file(file),
     );
   }

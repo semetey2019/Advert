@@ -7,8 +7,14 @@ class LoadingService {
       context: context,
       builder: (BuildContext context) {
         return const AlertDialog(
-          title: Text('Сиздин маалыматыныз жонотулуудо'),
-          content: CupertinoActivityIndicator(),
+          backgroundColor: Colors.deepPurple,
+          title: Text(
+            'Your message is being sent',
+            style: TextStyle(color: Colors.blue),
+          ),
+          content: CupertinoActivityIndicator(
+            color: Colors.pink,
+          ),
         );
       },
     );

@@ -22,7 +22,8 @@ class HomeView extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CupertinoActivityIndicator(
-                radius: 25,
+                color: Colors.pink,
+                radius: 30,
               ),
             );
           } else if (snapshot.hasError) {
@@ -41,7 +42,7 @@ class HomeView extends StatelessWidget {
                       children: [
                         products.image != null
                             ? SizedBox(
-                                height: 180,
+                                height: 200,
                                 child: PageView.builder(
                                     itemCount: products.image!.length,
                                     itemBuilder: (context, index) {
@@ -62,7 +63,7 @@ class HomeView extends StatelessWidget {
                   );
                 });
           } else {
-            return const Text("Белгисиз ката бар");
+            return const Text("Unknown error");
           }
         },
       ),

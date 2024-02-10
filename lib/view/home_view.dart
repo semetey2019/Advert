@@ -1,69 +1,77 @@
 import 'package:advert/add_product/add_product.dart';
-import 'package:advert/models/information.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
-
-  Stream<QuerySnapshot> readTodo() {
-    final db = FirebaseFirestore.instance;
-    return db.collection('products').snapshots();
-  }
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 207, 97, 227),
-      body: StreamBuilder(
-        stream: readTodo(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Home View'),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('products').snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CupertinoActivityIndicator(
-                color: Colors.pink,
-                radius: 30,
-              ),
+          if (snapshot.hasData) {
+            final List<DocumentSnapshot> documents = snapshot.data!.docs;
+
+            return ListView.builder(
+              itemCount: documents.length,
+              itemBuilder: (context, index) {
+                final Map<String, dynamic> data =
+                    documents[index].data() as Map<String, dynamic>;
+
+                // Extract the data from the document
+                final String title = data['title'];
+                final String description = data['description'];
+                final String name = data['name'];
+                final String dateTime = data['dateTime'];
+                final String phoneNumber = data['phoneNumber'];
+                final String address = data['address'];
+                final List<String> imageUrls =
+                    List<String>.from(data['imageUrls']);
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Image.network(
+                      imageUrls[0],
+                      fit: BoxFit.cover,
+                      width: 100,
+                      height: 100,
+                    ),
+                    const SizedBox(height: 10),
+                    Text('Name: $name'),
+                    Text('Date and Time: $dateTime'),
+                    Text('Phone Number: $phoneNumber'),
+                    Text('Address: $address'),
+                    const Divider(), // Add a divider between items
+                  ],
+                );
+              },
             );
           } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          } else if (snapshot.hasData) {
-            final List<Information> product = snapshot.data!.docs
-                .map((e) =>
-                    Information.fromMap(e.data() as Map<String, dynamic>))
-                .toList();
-            return ListView.builder(
-                itemCount: product.length,
-                itemBuilder: (context, index) {
-                  final products = product[index];
-                  return Card(
-                    child: Column(
-                      children: [
-                        products.image != null
-                            ? SizedBox(
-                                height: 200,
-                                child: PageView.builder(
-                                    itemCount: products.image!.length,
-                                    itemBuilder: (context, index) {
-                                      final images = products.image![index];
-                                      return Image.network(images);
-                                    }),
-                              )
-                            : const SizedBox(),
-                        const SizedBox(height: 30),
-                        ListTile(
-                          title: Text(products.title),
-                          leading: Text(products.description),
-                          subtitle: Text(products.dateTime),
-                          trailing: Text(products.adress),
-                        )
-                      ],
-                    ),
-                  );
-                });
+            return const Text('Error');
           } else {
-            return const Text("Unknown error");
+            return const CircularProgressIndicator();
           }
         },
       ),
@@ -74,7 +82,10 @@ class HomeView extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const AddProduct()),
           );
         },
-        child: const Icon(Icons.publish),
+        child: const Icon(
+          Icons.add,
+          color: Colors.blue,
+        ),
       ),
     );
   }

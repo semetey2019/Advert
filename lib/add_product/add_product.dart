@@ -134,7 +134,8 @@ class _AddProductState extends State<AddProduct> {
                   dateTime: _dateTime.text,
                   phoneNumber: _phoneNumber.text,
                   adress: _adress.text,
-                  image: urls,
+                  image: [],
+                  address: '',
                 );
                 await StoreService().informationSave(information);
                 // ignore: use_build_context_synchronously

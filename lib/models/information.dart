@@ -1,14 +1,16 @@
 import 'dart:convert';
 
 class Information {
-  Information(
-      {this.image,
-      required this.title,
-      required this.description,
-      required this.name,
-      required this.dateTime,
-      required this.phoneNumber,
-      required this.adress});
+  Information({
+    this.image,
+    required this.title,
+    required this.description,
+    required this.name,
+    required this.dateTime,
+    required this.phoneNumber,
+    required this.address,
+    required String adress,
+  });
 
   final List<String>? image;
   final String title;
@@ -16,22 +18,18 @@ class Information {
   final String name;
   final String dateTime;
   final String phoneNumber;
-  final String adress;
+  final String address;
 
   Map<String, dynamic> toMap() {
-    final result = <String, dynamic>{};
-
-    if (image != null) {
-      result.addAll({'image': image});
-    }
-    result.addAll({'title': title});
-    result.addAll({'description': description});
-    result.addAll({'name': name});
-    result.addAll({'dateTime': dateTime});
-    result.addAll({'phoneNumber': phoneNumber});
-    result.addAll({'adress': adress});
-
-    return result;
+    return {
+      'image': image,
+      'title': title,
+      'description': description,
+      'name': name,
+      'dateTime': dateTime,
+      'phoneNumber': phoneNumber,
+      'address': address,
+    };
   }
 
   factory Information.fromMap(Map<String, dynamic> map) {
@@ -42,7 +40,8 @@ class Information {
       name: map['name'] ?? '',
       dateTime: map['dateTime'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
-      adress: map['adress'] ?? '',
+      address: map['address'] ?? '',
+      adress: '',
     );
   }
 

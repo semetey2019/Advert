@@ -9,7 +9,7 @@ class LoadingService {
         return const AlertDialog(
           backgroundColor: Colors.deepPurple,
           title: Text(
-            'Your message is being sent',
+            'Your message is begin sent',
             style: TextStyle(color: Colors.blue),
           ),
           content: CupertinoActivityIndicator(

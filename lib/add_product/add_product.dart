@@ -83,6 +83,7 @@ class _AddProductState extends State<AddProduct> {
                   : IconButton(
                       onPressed: () async {
                         final value = await service.pickImages();
+                        // ignore: unnecessary_null_comparison
                         if (value != null) {
                           images = value;
                           setState(() {});
